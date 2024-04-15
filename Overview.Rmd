@@ -12,14 +12,14 @@ Our project will be an analytical project that analyzes climate data in R. We wi
 <br/>
 1. Estimate and predict changes in the different variables over time <br/>
 2. Compare different time frames <br/>
-3. Change detection using temperature and precipitation <br/>
+3. Create change maps using temperature and precipitation <br/>
 4. Look at areas with low precipitation and high temperature for drought <br/>
-5. Maybe use water index such as EWI
+5. Possibly incorporate a water index such as EWI
 
 ## Approach and Method
 <span style="color: #FF69B4;">Data:</span> 
 <br/>
-The datasets we will be using are rasters from the  NASA Earth Exchange (NEX) Downscaled Climate Projections (NEX-DCP30) collection obtained from Google Earth Engine which have three different bands containing variables of interest. This collection contains climate data from the continental United States and some projected climate data for future climate change scenarios. One variable in the dataset is “pr” which consists of the monthly mean of the daily precipitation rate at surface; it includes both liquid and solid phases from all types of clouds (both large-scale and convective) and is in units of kilogram meters-2 per second. The second variable that we are planning to use is “tasmin” which is the monthly mean of the daily-minimum near surface air temperature in units of kelvin. A third dataset variable we will be using is “tasmax” which is similar to “tasmin” except it is for the daily maximum temperature. Below are some spatial plots of the datasets.
+The datasets we will be using are rasters from the  NASA Earth Exchange (NEX) Downscaled Climate Projections (NEX-DCP30) collection obtained from Google Earth Engine, which have three different bands containing variables of interest. This collection contains climate data from the continental United States and some projected climate data for future climate change scenarios. One variable in the dataset is “pr” which consists of the monthly mean of the daily precipitation rate at surface; it includes both liquid and solid phases from all types of clouds (both large-scale and convective) and is in units of kilogram meters-2 per second. The second variable that we are planning to use is “tasmin” which is the monthly mean of the daily-minimum near surface air temperature in units of kelvin. A third dataset variable we will be using is “tasmax” which is similar to “tasmin” except it is for the daily maximum temperature.
 
 <span style="color: #FF69B4;">Code:</span> 
 <br/>
@@ -39,9 +39,10 @@ The datasets we will be using are rasters from the  NASA Earth Exchange (NEX) Do
 
 <span style="color: #FF69B4;">Anticipated Outcomes:</span> 
 <br/>
-- Study area map <br/>
+- Overall study area map <br/>
+- Maps of significant regions of the United States <br/>
 - Plots for each time period showing the different variables at each point in time <br/>
-- Change detection plots showing changes in temperature and precipitation between different time periods <br/>
+- Maps and plots showing changes in temperature and precipitation between different time periods <br/>
 - Plot where severity of drought conditions is calculated based on temperature and precipitation <br/>
 
 ## Code and Visualization

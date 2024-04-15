@@ -45,7 +45,7 @@ The datasets we will be using are rasters from the  NASA Earth Exchange (NEX) Do
 - Plot where severity of drought conditions is calculated based on temperature and precipitation <br/>
 
 ## Code and Visualization
-```{r}
+```{r, eval = FALSE}
 library(rgee)
 library(reticulate)
 

@@ -410,6 +410,62 @@ changes in temperature and precipitation between different time periods
 <br /> - Plot where severity of drought conditions is calculated based on
 temperature and precipitation <br /></p>
 </div>
+<div id="code-and-visualization" class="section level2">
+<h2>Code and Visualization</h2>
+<pre class="r"><code>library(rgee)
+library(reticulate)
+
+# install_python(version = &#39;3.12.3&#39;)
+
+py_config()
+
+use_python(Sys.which(&quot;python.exe&quot;))
+
+ee_install_set_pyenv(
+  py_path = &quot;/usr/bin/python3&quot;,
+  py_env = &quot;rgee&quot;,
+  Renviron = &quot;global&quot;,
+  confirm = interactive(),
+  quiet = FALSE
+)
+
+ee_check_python(quiet = FALSE)
+
+ee_install()
+ee_check()
+
+ee_clean_user_credentials()
+ee_Authenticate()
+
+ee_Initialize(
+  user = &quot;bengaskill12@gmail.com&quot;
+)
+
+# https://rstudio.github.io/reticulate/articles/calling_python.html
+# https://developers.google.com/earth-engine/guides/python_install
+# https://github.com/r-spatial/rgee/issues/355
+reticulate::py_run_file(&quot;C:/Users/BMONE/OneDrive/Documents/ee_authentication.py&quot;)
+
+
+# Import rgee.
+library(rgee)
+
+ee$Authenticate(auth_mode=&#39;notebook&#39;)
+
+ee$Initialize(project=&#39;bengaskill12-remote-sensing&#39;)  # &lt;-- EDIT THIS FOR YOUR PROJECT
+
+ee$String(&#39;Hello from the Earth Engine servers!&#39;)$getInfo()
+
+# Testing import image collection on Landsat data
+image &lt;- ee$Image(&#39;LANDSAT/LC08/C02/T1_L2/LC08_012031_20230327&#39;)
+Map$centerObject(image)
+Map$addLayer(image)
+
+# Testing our dataset
+climate &lt;- ee$Image(&#39;NASA/NEX-DCP30/rcp26_BNU-ESM_201807&#39;)
+Map$centerObject(climate)
+Map$addLayer(climate)</code></pre>
+</div>
 
 
 

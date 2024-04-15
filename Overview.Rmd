@@ -1,1 +1,102 @@
+---
+title: "Modeling Climate Change"
+author: "Jared Boone, Noah Kantor, Isack Walube, Ben Gaskill"
+output: html_document
+---
+<br/>
+<span style="color: #FF69B4;">Summary</span> 
+<br/>
+Our project will be an analytical project that analyzes climate data in R. We will be using the rGEE package to obtain data from the Google Earth Engine image collection "NASA/NEX-DCP30". The data we are interested in obtaining consists of precipitation, mean daily minimum temperature, and mean daily maximum temperature. We will be using this data to create plots and possibly a shiny app which will aim to show changes in climate conditions over time. Another thing we are interested in is looking at drought conditions. 
 
+<span style="color: #FF69B4;">Primary Objectives:</span> 
+<br/>
+1. Estimate and predict changes in the different variables over time <br/>
+2. Compare different time frames <br/>
+3. Change detection using temperature and precipitation <br/>
+4. Look at areas with low precipitation and high temperature for drought <br/>
+5. Maybe use water index such as EWI
+
+## Approach and Method
+<span style="color: #FF69B4;">Data:</span> 
+<br/>
+The datasets we will be using are rasters from the  NASA Earth Exchange (NEX) Downscaled Climate Projections (NEX-DCP30) collection obtained from Google Earth Engine which have three different bands containing variables of interest. This collection contains climate data from the continental United States and some projected climate data for future climate change scenarios. One variable in the dataset is “pr” which consists of the monthly mean of the daily precipitation rate at surface; it includes both liquid and solid phases from all types of clouds (both large-scale and convective) and is in units of kilogram meters-2 per second. The second variable that we are planning to use is “tasmin” which is the monthly mean of the daily-minimum near surface air temperature in units of kelvin. A third dataset variable we will be using is “tasmax” which is similar to “tasmin” except it is for the daily maximum temperature. Below are some spatial plots of the datasets.
+
+<span style="color: #FF69B4;">Code:</span> 
+<br/>
+- Load data into R environment using rGEE <br/>
+- Create maps of different variables <br/>
+- Create scatterplots of different variables with trendlines <br/>
+- Change  maps for different variables <br/>
+- Calculate drought index for different time periods <br/>
+- Change map of drought index <br/>
+
+<span style="color: #FF69B4;">Timeline:</span> 
+<br/>
+- By the end of the week of April 15 we will have completed all pre-processing steps and made sure everyone is on the same page with the R environment set up and all data loaded and processed using rGEE <br/>
+- By the end of the week of April 22 we will have completed about two thirds of the analysis <br/>
+- The final week, the week of April 29, will be spent completing the last third of the analysis,  fixing lingering bugs, making plots, adding descriptions for figures, and making sure the repository has complete documentation <br/>
+- Monday May 6 is final project due date <br/>
+
+<span style="color: #FF69B4;">Anticipated Outcomes:</span> 
+<br/>
+- Study area map <br/>
+- Plots for each time period showing the different variables at each point in time <br/>
+- Change detection plots showing changes in temperature and precipitation between different time periods <br/>
+- Plot where severity of drought conditions is calculated based on temperature and precipitation <br/>
+
+## Code and Visualization
+```{r}
+library(rgee)
+library(reticulate)
+
+# install_python(version = '3.12.3')
+
+py_config()
+
+use_python(Sys.which("python.exe"))
+
+ee_install_set_pyenv(
+  py_path = "/usr/bin/python3",
+  py_env = "rgee",
+  Renviron = "global",
+  confirm = interactive(),
+  quiet = FALSE
+)
+
+ee_check_python(quiet = FALSE)
+
+ee_install()
+ee_check()
+
+ee_clean_user_credentials()
+ee_Authenticate()
+
+ee_Initialize(
+  user = "bengaskill12@gmail.com"
+)
+
+# https://rstudio.github.io/reticulate/articles/calling_python.html
+# https://developers.google.com/earth-engine/guides/python_install
+# https://github.com/r-spatial/rgee/issues/355
+reticulate::py_run_file("C:/Users/BMONE/OneDrive/Documents/ee_authentication.py")
+
+
+# Import rgee.
+library(rgee)
+
+ee$Authenticate(auth_mode='notebook')
+
+ee$Initialize(project='bengaskill12-remote-sensing')  # <-- EDIT THIS FOR YOUR PROJECT
+
+ee$String('Hello from the Earth Engine servers!')$getInfo()
+
+# Testing import image collection on Landsat data
+image <- ee$Image('LANDSAT/LC08/C02/T1_L2/LC08_012031_20230327')
+Map$centerObject(image)
+Map$addLayer(image)
+
+# Testing our dataset
+climate <- ee$Image('NASA/NEX-DCP30/rcp26_BNU-ESM_201807')
+Map$centerObject(climate)
+Map$addLayer(climate)
+```

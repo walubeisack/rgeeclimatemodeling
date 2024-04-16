@@ -72,9 +72,43 @@ ee$String('Hello from the Earth Engine servers!')$getInfo()
 
 
 # -------------------------------- Analysis -----------------------------------#
-# Test our dataset
-climate2 <- ee$Image('NASA/NEX-DCP30/rcp26_BNU-ESM_201807')
+# Get the image collection
+testCollection <- ee$ImageCollection('NASA/NEX-DCP30')
 
-#climate2 <- ee$ImageCollection('NASA/NEX-DCP30')
-Map$centerObject(climate2)
-Map$addLayer(climate2)
+# Filter the dates and create a mosaic
+filteredDate <- testCollection$filterDate('1950-01-01', '2099-01-01')
+mosaic <- filteredDate$mosaic()
+
+# Select the desired bands or create a composite
+vis <- list(bands = c('pr'))
+
+# Add the layer to the map with the parameters
+Map$addLayer(mosaic, vis)
+
+library(stars)
+library(future)
+library(googledrive)
+
+# bot left, bot right, top right, top left
+box <- ee$Geometry$Polygon(
+  list(
+    c(-123, 25),
+    c(-65, 23),
+    c(-63, 50),
+    c(-128, 50)
+  )
+)
+
+library(raster)
+library(terra)
+
+mosaic_with_extent <- mosaic$clip(box)
+
+mosaic_raster <- ee_as_raster(mosaic_with_extent)
+
+plot(mosaic_raster)
+
+writeRaster(mosaic_raster, filename = file.path("images", "tp_data.tif"))
+
+r <- rast(file.path("images", "tp_data.tif"))
+plot(r)

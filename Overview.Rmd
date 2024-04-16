@@ -165,4 +165,11 @@ library(terra)
 # read in raster
 r <- rast(file.path("images", "tp_data.tif"))
 plot(r)
+
+print(r)
+summary(r)
 ```
+### In the above code:
+1. tp_data_1 corresponds to precipitation, measured in kg/m^2/s <br/>
+2. tp_data_2 corresponds to tasmin (monthly mean minimum temperature), measured in Kelvin <br/>
+3. tp_data_3 corresponds to tasmax (monthly mean maximum temperature), measured in Kelvin <br/>

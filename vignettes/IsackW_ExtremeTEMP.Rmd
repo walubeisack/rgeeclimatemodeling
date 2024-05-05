@@ -25,7 +25,7 @@ library(sf)
 ```
  
 ### 
-```{r}
+```{r, eval=F}
 climate_rast18 <- rast(here::here("5_year_highRes/2018_hiRes.tif"))
 tmax_2018 <- climate_rast18$tasmax - 273.15
 
@@ -49,15 +49,22 @@ maxtemp_6y <- rast(list(tmax_2018, tmax_2019, tmax_2020, tmax_2021,
 names(maxtemp_6y) <- c("2018", "2019", "2020", "2021", "2022", "2023")
 
 plot(maxtemp_6y, axes = FALSE, mar = c(1, 1, 2,3))
+
+maxtemp_6y <- rast(list(tmax_2018, tmax_2019, tmax_2020, tmax_2021,
+                     tmax_2022, tmax_2023))
+names(maxtemp_6y) <- c("2018", "2019", "2020", "2021", "2022", "2023")
+
+plot(maxtemp_6y, axes = FALSE, mar = c(1, 1, 2,3))
+
 ```
 
 
 
-```{r}
+```{r, eval=F}
 # read in the regions
 us_region <- read_sf("../states/States_shapefile.shp") 
 # filter regions
-northeast <- filter(us_region, Region =="Northeast") %>% select(State_Name)
+northeast5 <- filter(us_region, Region =="Northeast") %>% select(State_Name)
 south <- filter(us_region, Region =="South") %>% select(State_Name)
 west <- filter(us_region, Region =="West") %>% select(State_Name)
 midwest <- filter(us_region, Region =="Midwest") %>% select(State_Name)
@@ -65,10 +72,10 @@ midwest <- filter(us_region, Region =="Midwest") %>% select(State_Name)
 
 
 
-```{r, fig.width=6, fig.height=5}
-#crop raster by region and plot
-tmax_ne_6y <- crop(maxtemp_6y, northeast, mask = TRUE)
-plot(tmax_ne_6y, axes = FALSE, mar = c(1, 1, 4, 5))
+```{r, eval=F fig.width=6, fig.height=5}
+tmax_ne_6y <- crop(maxtemp_6y, northeast, mask = F)
+plot(tmax_ne_6y, axes = FALSE, mar = c(1, 1, 2, 3))
+
 
 tmax_mdw_6y <- crop(maxtemp_6y, midwest, mask = TRUE)
 plot(tmax_mdw_6y, axes = FALSE, mar = c(1, 1, 4, 5))
@@ -77,11 +84,11 @@ tmax_s_6y <- crop(maxtemp_6y, south, mask = TRUE)
 plot(tmax_s_6y, axes = FALSE, mar = c(1, 1, 4, 6))
 
 tmax_w_6y <- crop(maxtemp_6y, west, mask = TRUE)
-plot(tmax_w_6y, axes = FALSE, mar = c(1, 1, 4, 5))
+plot(tmax_w_6y, axes = FALSE, mar = c(1, 1, 2, 3))
 ```
 
 
-```{r, fig.width=6, fig.height=5}
+```{r, eval=F fig.width=6, fig.height=5}
 # Calculate the 90th percentile, filetr the values above the 90th percentile and plot
 above_90th_northe <- tmax_ne_6y > unlist(global(tmax_ne_6y, 
                                                 probs = 0.9, na.rm = TRUE))
@@ -103,7 +110,7 @@ plot(above_90th_west, axes = FALSE, mar = c(1, 1, 4, 5))
 ```
 
 
-```{r, fig.width=6, fig.height=5}
+```{r, eval=F, fig.width=6, fig.height=5}
 climate_rast18 <- rast(here::here("5_year_highRes/2018_hiRes.tif"))
 tmin_2018 <- climate_rast18$tasmin - 273.15
 
@@ -129,7 +136,7 @@ names(mintemp_6y) <- c("2018", "2019", "2020", "2021", "2022", "2023")
 plot(mintemp_6y, axes = FALSE, mar = c(1, 1, 4, 6))
 ```
 
-```{r, fig.width=6, fig.height=5}
+```{r, eval=F, fig.width=6, fig.height=5}
 #crop raster by region and plot
 tmin_ne_6y <- crop(mintemp_6y, northeast, mask = TRUE)
 plot(tmin_ne_6y, axes = FALSE, mar = c(1, 1, 2,3))
@@ -144,12 +151,12 @@ tmin_w_6y <- crop(mintemp_6y, west, mask = TRUE)
 plot(tmin_ne_6y, axes = FALSE, mar = c(1, 1, 2,3))
 ```
 
-```{r, fig.width=6, fig.height=5}
+```{r, eval=F, fig.width=6, fig.height=5}
 # Calculate the 90th percentile, filter the values above the 90th percentile and plot
-
 below_10th_northe <- tmin_ne_6y < unlist(global(tmin_ne_6y, 
                                                probs = 0.1, na.rm = TRUE))
-plot(below_10th_northe, axes = FALSE, mar = c(1, 1, 2,3))
+plot(below_10th_northe, axes = FALSE, mar = c(1, 1, 2,3), add = TRUE)
+
 
 below_10th_mdwest <- tmin_mdwst_6y < unlist(global(tmin_mdwst_6y, 
                                                probs = 0.1, na.rm = TRUE))
@@ -164,6 +171,40 @@ plot(below_10th_south, axes = FALSE, mar = c(1, 1, 2,3))
 below_10th_west <- tmin_w_6y < unlist(global(tmin_w_6y, 
                                                probs = 0.1, na.rm = TRUE))
 plot(below_10th_west, axes = FALSE, mar = c(1, 1, 2,3))
+plot(st_geometry(t), add = TRUE)
+
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

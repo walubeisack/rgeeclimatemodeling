@@ -55,16 +55,15 @@ maxtemp_6y <- rast(list(tmax_2018, tmax_2019, tmax_2020, tmax_2021,
 names(maxtemp_6y) <- c("2018", "2019", "2020", "2021", "2022", "2023")
 
 plot(maxtemp_6y, axes = FALSE, mar = c(1, 1, 2,3))
-
 ```
 
 
 
 ```{r, eval=F}
 # read in the regions
-us_region <- read_sf("../states/States_shapefile.shp") 
+us_region$geometry <- read_sf("../states/States_shapefile.shp") 
 # filter regions
-northeast5 <- filter(us_region, Region =="Northeast") %>% select(State_Name)
+northeast <- filter(us_region, Region =="Northeast") %>% select(State_Name)
 south <- filter(us_region, Region =="South") %>% select(State_Name)
 west <- filter(us_region, Region =="West") %>% select(State_Name)
 midwest <- filter(us_region, Region =="Midwest") %>% select(State_Name)
@@ -72,13 +71,14 @@ midwest <- filter(us_region, Region =="Midwest") %>% select(State_Name)
 
 
 
-```{r, eval=F fig.width=6, fig.height=5}
+```{r, eval=F, fig.width=6, fig.height=5}
 tmax_ne_6y <- crop(maxtemp_6y, northeast, mask = F)
 plot(tmax_ne_6y, axes = FALSE, mar = c(1, 1, 2, 3))
 
 
 tmax_mdw_6y <- crop(maxtemp_6y, midwest, mask = TRUE)
 plot(tmax_mdw_6y, axes = FALSE, mar = c(1, 1, 4, 5))
+
 
 tmax_s_6y <- crop(maxtemp_6y, south, mask = TRUE)
 plot(tmax_s_6y, axes = FALSE, mar = c(1, 1, 4, 6))
@@ -89,24 +89,45 @@ plot(tmax_w_6y, axes = FALSE, mar = c(1, 1, 2, 3))
 
 
 ```{r, eval=F fig.width=6, fig.height=5}
-# Calculate the 90th percentile, filetr the values above the 90th percentile and plot
+# Calculate the 90th percentile, filter the values above the 90th percentile and plot
 above_90th_northe <- tmax_ne_6y > unlist(global(tmax_ne_6y, 
                                                 probs = 0.9, na.rm = TRUE))
-plot(above_90th_northe, axes = FALSE, mar = c(1, 1, 4, 5))
+
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(above_90th_northe[[x]], axes = F, main = names(above_90th_northe[[x]]))
+  plot(northeast, add = TRUE, col = rgb(0, 0, 0, 0))
+})
+
 
 above_90th_mdwest <- tmax_mdw_6y > unlist(global(tmax_mdw_6y, 
                                                   probs = 0.9, na.rm = TRUE))
-plot(above_90th_mdwest, axes = FALSE, mar = c(1, 1, 4, 5))
+
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(above_90th_mdwest[[x]], axes = F, main = names(above_90th_mdwest[[x]]))
+  plot(midwest, add = TRUE, col = rgb(0, 0, 0, 0))
+})
+
 
 above_90th_south <- tmax_s_6y > unlist(global(tmax_s_6y, 
                                                probs = 0.9, na.rm = TRUE))
-plot(above_90th_south, axes = FALSE, mar = c(1, 1, 4, 5))
+
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(above_90th_south[[x]], axes = F, main = names(above_90th_south[[x]]))
+  plot(south, add = TRUE, col = rgb(0, 0, 0, 0))
+})
 
 
 above_90th_west <- tmax_w_6y > unlist(global(tmax_w_6y, 
                                                probs = 0.9, na.rm = TRUE))
-plot(above_90th_west, axes = FALSE, mar = c(1, 1, 4, 5))
 
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(above_90th_west[[x]], axes = F, main = names(above_90th_west[[x]]))
+  plot(west, add = TRUE, col = rgb(0, 0, 0, 0))
+})
 ```
 
 
@@ -133,7 +154,7 @@ mintemp_6y <- rast(list(tmin_2018, tmin_2019, tmin_2020, tmin_2021,
                      tmin_2022, tmin_2023))
 names(mintemp_6y) <- c("2018", "2019", "2020", "2021", "2022", "2023")
 
-plot(mintemp_6y, axes = FALSE, mar = c(1, 1, 4, 6))
+plot(mintemp_6y, axes = FALSE, mar = c(1, 1, 2, 3))
 ```
 
 ```{r, eval=F, fig.width=6, fig.height=5}
@@ -155,24 +176,39 @@ plot(tmin_ne_6y, axes = FALSE, mar = c(1, 1, 2,3))
 # Calculate the 90th percentile, filter the values above the 90th percentile and plot
 below_10th_northe <- tmin_ne_6y < unlist(global(tmin_ne_6y, 
                                                probs = 0.1, na.rm = TRUE))
-plot(below_10th_northe, axes = FALSE, mar = c(1, 1, 2,3), add = TRUE)
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(below_10th_northe[[x]], axes = F, main = names(below_10th_northe[[x]]))
+  plot(northeast, add = TRUE, col = rgb(0, 0, 0, 0))
+})
 
 
 below_10th_mdwest <- tmin_mdwst_6y < unlist(global(tmin_mdwst_6y, 
                                                probs = 0.1, na.rm = TRUE))
-plot(below_10th_mdwest, axes = FALSE, mar = c(1, 1, 2,3))
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(below_10th_mdwest[[x]], axes = F, main = names(below_10th_mdwest[[x]]))
+  plot(midwest, add = TRUE, col = rgb(0, 0, 0, 0))
+})
+
 
 
 below_10th_south <- tmin_s_6y < unlist(global(tmin_s_6y, 
                                                probs = 0.1, na.rm = TRUE))
-plot(below_10th_south, axes = FALSE, mar = c(1, 1, 2,3))
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(below_10th_south[[x]], axes = F, main = names(below_10th_south[[x]]))
+  plot(south, add = TRUE, col = rgb(0, 0, 0, 0))
+})
 
 
 below_10th_west <- tmin_w_6y < unlist(global(tmin_w_6y, 
                                                probs = 0.1, na.rm = TRUE))
-plot(below_10th_west, axes = FALSE, mar = c(1, 1, 2,3))
-plot(st_geometry(t), add = TRUE)
-
+par(mfrow = c(2, 3), mar = c(0, 0, 1, 0))
+lapply(1:6, function(x){
+  plot(below_10th_west[[x]], axes = F, main = names(below_10th_west[[x]]))
+  plot(west, add = TRUE, col = rgb(0, 0, 0, 0))
+})
 ```
 
 
